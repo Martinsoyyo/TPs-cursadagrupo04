@@ -1,0 +1,20 @@
+GeneratorModel for yakindu::c {
+
+	const PROJECT : string = "TPs-cursadagrupo04"
+
+	const FOLDER : string = "/projects/Probando_Botonera/gen"
+
+	statechart Botonera {
+
+feature OutEventAPI {
+	getters = true
+	observables = false
+}
+
+		feature Outlet {
+			targetProject = PROJECT
+			targetFolder = FOLDER
+			libraryTargetFolder = "TPs-cursadagrupo04/projects/Probando_Botonera/gen"
+		}
+	}
+}
