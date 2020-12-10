@@ -3,7 +3,7 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include "..\src\sc_types.h"
+#include "..\inc\sc_types.h"
 
 #ifdef __cplusplus
 extern "C" { 
@@ -12,15 +12,9 @@ extern "C" {
 /*! \file Header of the state machine 'application'.
 */
 
-#ifndef APPLICATION_EVENTQUEUE_BUFFERSIZE
-#define APPLICATION_EVENTQUEUE_BUFFERSIZE 20
-#endif
-#ifndef SC_INVALID_EVENT_VALUE
-#define SC_INVALID_EVENT_VALUE 0
-#endif
 /*! Define number of states in the state enum */
 
-#define APPLICATION_STATE_COUNT 10
+#define APPLICATION_STATE_COUNT 9
 
 /*! Define dimension of the state configuration vector for orthogonal states. */
 #define APPLICATION_MAX_ORTHOGONAL_STATES 3
@@ -29,73 +23,59 @@ extern "C" {
 #define APPLICATION_MAX_PARALLEL_TIME_EVENTS 2
 
 /*! Define indices of states in the StateConfVector */
-#define SCVI_APPLICATION_BUTTONS_IDDLE 0
-#define SCVI_APPLICATION_BUTTONS_ACTIVE 0
-#define SCVI_APPLICATION_BUTTONS_ACTIVE__REGION0_DEBOUNCE 0
-#define SCVI_APPLICATION_BUTTONS_ACTIVE__REGION0_PRESSED 0
-#define SCVI_APPLICATION_MAIN_REGION_WAIT 1
-#define SCVI_APPLICATION__REGION2_CLOSED 2
-#define SCVI_APPLICATION__REGION2_OPEN 2
-#define SCVI_APPLICATION__REGION2_IN_MOTION 2
-#define SCVI_APPLICATION__REGION2_IN_MOTION__REGION0_OPENING 2
-#define SCVI_APPLICATION__REGION2_IN_MOTION__REGION0_CLOSING 2
-
-
+#define SCVI_APPLICATION_TECX_DEBOUNCE 0
+#define SCVI_APPLICATION_TECX_NO_OPRIMIDO 0
+#define SCVI_APPLICATION_TECX_OPRIMIDO 0
+#define SCVI_APPLICATION_TECX_VALIDACION 0
+#define SCVI_APPLICATION_MAIN_REGION_ESPERA 1
+#define SCVI_APPLICATION_LED3_TITILA 2
+#define SCVI_APPLICATION_LED3_TITILA_R1_ENCENDIDO 2
+#define SCVI_APPLICATION_LED3_TITILA_R1_APAGADO 2
+#define SCVI_APPLICATION_LED3_REPOSO 2
 
 /*! Enumeration of all states */ 
 typedef enum
 {
 	Application_last_state,
-	Application_Buttons_IDDLE,
-	Application_Buttons_ACTIVE,
-	Application_Buttons_ACTIVE__region0_DEBOUNCE,
-	Application_Buttons_ACTIVE__region0_PRESSED,
-	Application_main_region_WAIT,
-	Application__region2_CLOSED,
-	Application__region2_OPEN,
-	Application__region2_IN_MOTION,
-	Application__region2_IN_MOTION__region0_OPENING,
-	Application__region2_IN_MOTION__region0_CLOSING
+	Application_TECX_DEBOUNCE,
+	Application_TECX_NO_OPRIMIDO,
+	Application_TECX_OPRIMIDO,
+	Application_TECX_VALIDACION,
+	Application_main_region_ESPERA,
+	Application_LED3_TITILA,
+	Application_LED3_TITILA_r1_ENCENDIDO,
+	Application_LED3_TITILA_r1_APAGADO,
+	Application_LED3_REPOSO
 } ApplicationStates;
 
 /*! Type definition of the data structure for the ApplicationIface interface scope. */
 typedef struct
 {
-	sc_boolean ev_button_press_raised;
-	sc_integer ev_button_press_value;
-	sc_boolean ev_button_release_raised;
-	sc_boolean ev_button_OK_raised;
-	sc_boolean ev_open_raised;
-	sc_boolean ev_close_raised;
-	sc_boolean ev_presence_raised;
+	sc_boolean evTECXNoOprimido_raised;
+	sc_boolean evTECXOprimido_raised;
+	sc_integer evTECXOprimido_value;
 } ApplicationIface;
 
 
 /* Declaration of constants for scope ApplicationIface. */
+extern const sc_integer APPLICATION_APPLICATIONIFACE_LED1;
+extern const sc_integer APPLICATION_APPLICATIONIFACE_LED2;
+extern const sc_integer APPLICATION_APPLICATIONIFACE_LED3;
 extern const sc_boolean APPLICATION_APPLICATIONIFACE_LED_ON;
 extern const sc_boolean APPLICATION_APPLICATIONIFACE_LED_OFF;
-extern const sc_integer APPLICATION_APPLICATIONIFACE_LED0_R;
-extern const sc_integer APPLICATION_APPLICATIONIFACE_LED0_G;
-extern const sc_integer APPLICATION_APPLICATIONIFACE_LED0_B;
-extern const sc_boolean APPLICATION_APPLICATIONIFACE_MOTOR_ON;
-extern const sc_boolean APPLICATION_APPLICATIONIFACE_MOTOR_OFF;
-extern const sc_boolean APPLICATION_APPLICATIONIFACE_OPENING;
-extern const sc_boolean APPLICATION_APPLICATIONIFACE_CLOSING;
 extern const sc_integer APPLICATION_APPLICATIONIFACE_TEC1;
+extern const sc_integer APPLICATION_APPLICATIONIFACE_TEC2;
 extern const sc_integer APPLICATION_APPLICATIONIFACE_TEC3;
 extern const sc_integer APPLICATION_APPLICATIONIFACE_TEC4;
-extern const sc_integer APPLICATION_APPLICATIONIFACE_MIN_POS;
-extern const sc_integer APPLICATION_APPLICATIONIFACE_MAX_POS;
-extern const sc_integer APPLICATION_APPLICATIONIFACE_MAX_TIME_OPENED;
 
 
 /*! Type definition of the data structure for the ApplicationInternal interface scope. */
 typedef struct
 {
-	sc_integer count;
-	sc_integer viTec;
-	sc_integer pos;
-	sc_integer time_opened;
+	sc_boolean siTitilarLED_raised;
+	sc_boolean siNoTitilarLED_raised;
+	sc_boolean siTECXOK_raised;
+	sc_integer viTecla;
 } ApplicationInternal;
 
 
@@ -103,10 +83,9 @@ typedef struct
 /*! Type definition of the data structure for the ApplicationTimeEvents interface scope. */
 typedef struct
 {
-	sc_boolean application_Buttons_ACTIVE__region0_DEBOUNCE_tev0_raised;
-	sc_boolean application__region2_OPEN_tev0_raised;
-	sc_boolean application__region2_IN_MOTION__region0_OPENING_tev0_raised;
-	sc_boolean application__region2_IN_MOTION__region0_CLOSING_tev0_raised;
+	sc_boolean application_TECX_DEBOUNCE_tev0_raised;
+	sc_boolean application_LED3_TITILA_r1_ENCENDIDO_tev0_raised;
+	sc_boolean application_LED3_TITILA_r1_APAGADO_tev0_raised;
 } ApplicationTimeEvents;
 
 
@@ -143,54 +122,30 @@ extern void application_runCycle(Application* handle);
 /*! Raises a time event. */
 extern void application_raiseTimeEvent(Application* handle, sc_eventid evid);
 
+/*! Raises the in event 'evTECXNoOprimido' that is defined in the default interface scope. */ 
+extern void applicationIface_raise_evTECXNoOprimido(Application* handle);
+
+/*! Raises the in event 'evTECXOprimido' that is defined in the default interface scope. */ 
+extern void applicationIface_raise_evTECXOprimido(Application* handle, sc_integer value);
+
+/*! Gets the value of the variable 'LED1' that is defined in the default interface scope. */ 
+extern sc_integer applicationIface_get_lED1(const Application* handle);
+/*! Gets the value of the variable 'LED2' that is defined in the default interface scope. */ 
+extern sc_integer applicationIface_get_lED2(const Application* handle);
+/*! Gets the value of the variable 'LED3' that is defined in the default interface scope. */ 
+extern sc_integer applicationIface_get_lED3(const Application* handle);
 /*! Gets the value of the variable 'LED_ON' that is defined in the default interface scope. */ 
 extern sc_boolean applicationIface_get_lED_ON(const Application* handle);
 /*! Gets the value of the variable 'LED_OFF' that is defined in the default interface scope. */ 
 extern sc_boolean applicationIface_get_lED_OFF(const Application* handle);
-/*! Gets the value of the variable 'LED0_R' that is defined in the default interface scope. */ 
-extern sc_integer applicationIface_get_lED0_R(const Application* handle);
-/*! Gets the value of the variable 'LED0_G' that is defined in the default interface scope. */ 
-extern sc_integer applicationIface_get_lED0_G(const Application* handle);
-/*! Gets the value of the variable 'LED0_B' that is defined in the default interface scope. */ 
-extern sc_integer applicationIface_get_lED0_B(const Application* handle);
-/*! Gets the value of the variable 'MOTOR_ON' that is defined in the default interface scope. */ 
-extern sc_boolean applicationIface_get_mOTOR_ON(const Application* handle);
-/*! Gets the value of the variable 'MOTOR_OFF' that is defined in the default interface scope. */ 
-extern sc_boolean applicationIface_get_mOTOR_OFF(const Application* handle);
-/*! Gets the value of the variable 'OPENING' that is defined in the default interface scope. */ 
-extern sc_boolean applicationIface_get_oPENING(const Application* handle);
-/*! Gets the value of the variable 'CLOSING' that is defined in the default interface scope. */ 
-extern sc_boolean applicationIface_get_cLOSING(const Application* handle);
 /*! Gets the value of the variable 'TEC1' that is defined in the default interface scope. */ 
 extern sc_integer applicationIface_get_tEC1(const Application* handle);
+/*! Gets the value of the variable 'TEC2' that is defined in the default interface scope. */ 
+extern sc_integer applicationIface_get_tEC2(const Application* handle);
 /*! Gets the value of the variable 'TEC3' that is defined in the default interface scope. */ 
 extern sc_integer applicationIface_get_tEC3(const Application* handle);
 /*! Gets the value of the variable 'TEC4' that is defined in the default interface scope. */ 
 extern sc_integer applicationIface_get_tEC4(const Application* handle);
-/*! Gets the value of the variable 'MIN_POS' that is defined in the default interface scope. */ 
-extern sc_integer applicationIface_get_mIN_POS(const Application* handle);
-/*! Gets the value of the variable 'MAX_POS' that is defined in the default interface scope. */ 
-extern sc_integer applicationIface_get_mAX_POS(const Application* handle);
-/*! Gets the value of the variable 'MAX_TIME_OPENED' that is defined in the default interface scope. */ 
-extern sc_integer applicationIface_get_mAX_TIME_OPENED(const Application* handle);
-/*! Raises the in event 'ev_button_press' that is defined in the default interface scope. */ 
-extern void applicationIface_raise_ev_button_press(Application* handle, sc_integer value);
-
-/*! Raises the in event 'ev_button_release' that is defined in the default interface scope. */ 
-extern void applicationIface_raise_ev_button_release(Application* handle);
-
-/*! Raises the in event 'ev_button_OK' that is defined in the default interface scope. */ 
-extern void applicationIface_raise_ev_button_OK(Application* handle);
-
-/*! Raises the in event 'ev_open' that is defined in the default interface scope. */ 
-extern void applicationIface_raise_ev_open(Application* handle);
-
-/*! Raises the in event 'ev_close' that is defined in the default interface scope. */ 
-extern void applicationIface_raise_ev_close(Application* handle);
-
-/*! Raises the in event 'ev_presence' that is defined in the default interface scope. */ 
-extern void applicationIface_raise_ev_presence(Application* handle);
-
 
 /*!
  * Checks whether the state machine is active (until 2.4.1 this method was used for states).

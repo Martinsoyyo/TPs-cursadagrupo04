@@ -3,7 +3,7 @@
 #ifndef APPLICATIONREQUIRED_H_
 #define APPLICATIONREQUIRED_H_
 
-#include "..\src\sc_types.h"
+#include "..\inc\sc_types.h"
 #include "Application.h"
 
 #ifdef __cplusplus
@@ -20,7 +20,6 @@ are defined.
 
 This state machine makes use of operations declared in the state machines interface or internal scopes. Thus the function prototypes:
 	- applicationIface_opLED
-	- applicationIface_opCook
 are defined.
 
 These functions will be called during a 'run to completion step' (runCycle) of the statechart. 
@@ -30,7 +29,6 @@ There are some constraints that have to be considered for the implementation of 
  
 */
 extern void applicationIface_opLED(const Application* handle, const sc_integer LEDNumber, const sc_boolean State);
-extern void applicationIface_opCook(const Application* handle, const sc_integer Mode, const sc_boolean State);
 
 
 

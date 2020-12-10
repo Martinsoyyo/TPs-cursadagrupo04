@@ -3,7 +3,7 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include "..\inc\sc_types.h"
+#include "../../TP2/inc/sc_types.h"
 
 #ifdef __cplusplus
 extern "C" { 

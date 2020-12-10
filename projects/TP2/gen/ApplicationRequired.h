@@ -3,8 +3,8 @@
 #ifndef APPLICATIONREQUIRED_H_
 #define APPLICATIONREQUIRED_H_
 
-#include "..\inc\sc_types.h"
-#include "Application.h"
+#include "../../TP2/gen/Application.h"
+#include "../../TP2/inc/sc_types.h"
 
 #ifdef __cplusplus
 extern "C"
