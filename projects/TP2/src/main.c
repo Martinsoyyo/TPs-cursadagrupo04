@@ -113,7 +113,17 @@ uint32_t Buttons_GetStatus_(void) {
 
 /* COMPLETAR CON LA INICIALIZACIÓN DE LOS LEDs Y LAS TECLAS */
 void Init_LEDs_and_TECs(void){
-	// Completar
+	GpioInit(_LED1);
+	GpioInit(_LED2);
+	GpioInit(_LED3);
+	GpioInit(_LEDR);
+	GpioInit(_LEDG);
+	GpioInit(_LEDB);
+
+	GpioInit(_TEC_1);
+	GpioInit(_TEC_2);
+	GpioInit(_TEC_3);
+	GpioInit(_TEC_4);
 }
 
 
